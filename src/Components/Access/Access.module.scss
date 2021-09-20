@@ -1,0 +1,31 @@
+@import '../../assets/styles/colors.scss';
+
+.grid {
+  background-image: $gradientColor;
+  width: 100vw;
+  height: 100vh;
+}
+
+.card {
+  width: max-content;
+  margin: auto;
+  max-width: 400px;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 15px;
+}
+
+.card__input {
+  width: 90%;
+  margin: 10px !important;
+}
+
+.card__button {
+  margin: 10px !important;
+}
+
+.card__message {
+  display: block;
+  margin: 10px;
+}
