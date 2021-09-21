@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.scss';
-import Login from './Components/Access/Login';
+import AccessRoute from './Routes/Access.route';
 import NotFound from './Components/NotFound/NotFound';
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
@@ -9,8 +9,8 @@ import { BrowserRouter, Switch, Route } from 'react-router-dom';
 ReactDOM.render(
   <BrowserRouter>
     <Switch>
-      <Route path="/login" exact={true} component={Login} />
-      <Route path="" component={NotFound} />
+      <Route path="/acesso" component={AccessRoute} />
+      <Route path="*" component={NotFound} />
     </Switch>
   </BrowserRouter>,
   document.getElementById('root')
