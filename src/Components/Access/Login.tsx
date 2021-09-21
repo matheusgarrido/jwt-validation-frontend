@@ -46,7 +46,7 @@ const Login = () => {
         </Button>
         <div className={Style.card__message}>
           <Typography>Ainda não é cadastrado?</Typography>
-          <Link to="/cadastro">
+          <Link to="/acesso/cadastro">
             <Typography>Crie sua conta</Typography>
           </Link>
         </div>
