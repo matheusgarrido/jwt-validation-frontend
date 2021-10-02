@@ -27,7 +27,7 @@ const Login = () => {
         <TextField
           error={!!error.password || !!error.all}
           id="password"
-          label="Senha"
+          label="Password"
           type="password"
           variant="outlined"
           helperText={error.password}
@@ -46,9 +46,9 @@ const Login = () => {
           Login
         </Button>
         <div className={Style.card__message}>
-          <Typography>Ainda não é cadastrado?</Typography>
+          <Typography>Not registered yet?</Typography>
           <Link to="/acesso/cadastro">
-            <Typography>Crie sua conta</Typography>
+            <Typography>Create your account</Typography>
           </Link>
         </div>
       </form>
