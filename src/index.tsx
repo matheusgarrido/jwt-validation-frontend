@@ -1,15 +1,18 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.scss';
-import AccessRoute from './Routes/Access.route';
 import NotFound from './Components/NotFound/NotFound';
+import Login from './Components/Access/Login';
 import reportWebVitals from './reportWebVitals';
-import { BrowserRouter, Switch, Route } from 'react-router-dom';
+import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom';
 
 ReactDOM.render(
   <BrowserRouter>
     <Switch>
-      <Route path="/acesso" component={AccessRoute} />
+      {/* Access */}
+      <Route path="/login" exact component={Login} />
+      <Redirect from="/login/*" to="/login" />
+      {/* Not Found */}
       <Route path="*" component={NotFound} />
     </Switch>
   </BrowserRouter>,
