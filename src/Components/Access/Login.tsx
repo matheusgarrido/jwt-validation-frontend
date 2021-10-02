@@ -13,7 +13,7 @@ const Login = () => {
     <GridAccess title="Login">
       <form onSubmit={handle.submit}>
         <TextField
-          error={!!error.email}
+          error={!!error.email || !!error.all}
           id="email"
           label="Email"
           type="email"
@@ -25,7 +25,7 @@ const Login = () => {
           required
         />
         <TextField
-          error={!!error.password}
+          error={!!error.password || !!error.all}
           id="password"
           label="Senha"
           type="password"
@@ -36,6 +36,7 @@ const Login = () => {
           className={Style.card__input}
           required
         />
+        <p>{error.all}</p>
         <Button
           variant="contained"
           disabled={getValue.disabledButton()}
