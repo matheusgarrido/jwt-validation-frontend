@@ -67,6 +67,11 @@ export const useLogin = () => {
     disabledButton: (): boolean => {
       return !email || !password;
     },
+    //Verify if some field has an error
+    hasError: (): string => {
+      const hasError = Object.values(error).filter((err) => !!err).length;
+      return !!hasError ? 'Please fill the form correctly' : '';
+    },
   };
 
   return {

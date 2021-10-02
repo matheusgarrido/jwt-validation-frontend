@@ -36,7 +36,7 @@ const Login = () => {
           className={Style.card__input}
           required
         />
-        <p>{error.all}</p>
+        <p>{error.all || getValue.hasError()}</p>
         <Button
           variant="contained"
           disabled={getValue.disabledButton()}
