@@ -20,7 +20,8 @@ const Login = () => {
           variant="outlined"
           helperText={error.email}
           value={data.email}
-          onInput={handle.email}
+          onInput={handle.input}
+          onBlur={handle.blur}
           className={Style.card__input}
           required
         />
@@ -32,7 +33,8 @@ const Login = () => {
           variant="outlined"
           helperText={error.password}
           value={data.password}
-          onInput={handle.password}
+          onInput={handle.input}
+          onBlur={handle.blur}
           className={Style.card__input}
           required
         />

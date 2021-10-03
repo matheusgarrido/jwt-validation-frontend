@@ -25,19 +25,16 @@ export const useLogin = () => {
   const defaultError = { ...defaultEmptyFields, all: '' };
   const [error, setError] = useState<IErrorList>(defaultError);
 
-  //Get an inputted value
-  const inputField = (event: FormEvent) => {
-    handle.error([{ field: 'all', value: '' }]);
-    const { value } = event.target as HTMLInputElement;
-    console.log(error);
-    return value;
-  };
   //Verify if has errors (invalid) or not (valid)
-  const invalidateForm = () => {
-    const { email, password } = inputValues;
-    const invalid = loginValidation({ email, password });
-    if (invalid) return invalid;
-    return false;
+  const invalidateFields = (fields: Object) => {
+    const invalid = loginValidation(fields);
+    return invalid ? invalid : false;
+  };
+  //Verify if one field has error
+  const invalidateGenericalObject = (field: TField) => {
+    const fieldToBeValidated: any = {};
+    fieldToBeValidated[field] = inputValues[field];
+    return invalidateFields(fieldToBeValidated);
   };
 
   //Handle Form
@@ -62,18 +59,42 @@ export const useLogin = () => {
       const { accessToken, refreshToken } = newUser.data;
     },
     //Change input values state
-    email: (event: FormEvent) => {
-      setInputValues({ ...inputValues, email: inputField(event) });
+    input: async (event: FormEvent) => {
+      const { value, field } = getValue.inputFieldValues(event);
+      const newInputValues = { ...inputValues };
+      newInputValues[field] = value;
+      await setInputValues(newInputValues);
+      const invalid = invalidateGenericalObject(field);
+      if (!invalid) {
+        handle.error([{ field, value: '' }]);
+      }
     },
-    password: (event: FormEvent) => {
-      setInputValues({ ...inputValues, password: inputField(event) });
+    // On blur (after the focus)
+    blur: (event: FormEvent) => {
+      const { field } = getValue.inputFieldValues(event);
+      if (inputValues[field] || error[field]) {
+        const invalid = invalidateGenericalObject(field);
+        if (invalid) {
+          handle.error([{ field, value: invalid[0].message }]);
+          return;
+        }
+      }
+      handle.error([{ field, value: '' }]);
     },
   };
 
   const getValue = {
+    //Get some input field values
+    inputFieldValues: (event: FormEvent): { value: string; field: TField } => {
+      handle.error([{ field: 'all', value: '' }]);
+      const target = event.target as HTMLInputElement;
+      const field = target.id as TField;
+      return { value: target.value, field };
+    },
     //Get boolean to disable submit button
     disabledButton: (): boolean => {
-      return !!invalidateForm();
+      const { email, password } = inputValues;
+      return !!invalidateFields({ email, password });
     },
     //Verify if some field has an error
     hasError: (): string => {
