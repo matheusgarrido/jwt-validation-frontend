@@ -5,6 +5,7 @@
   "dependencies": {
     "@emotion/react": "^11.4.1",
     "@emotion/styled": "^11.3.0",
+    "@hapi/joi": "^15.1.1",
     "@mui/icons-material": "^5.0.0",
     "@mui/material": "^5.0.0",
     "@testing-library/jest-dom": "^5.11.4",
@@ -48,6 +49,7 @@
     ]
   },
   "devDependencies": {
+    "@types/hapi__joi": "^17.1.7",
     "@types/react-router-dom": "^5.1.9"
   }
 }

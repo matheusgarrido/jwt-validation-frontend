@@ -1733,7 +1733,7 @@
   "resolved" "https://registry.npmjs.org/@hapi/hoek/-/hoek-8.5.1.tgz"
   "version" "8.5.1"
 
-"@hapi/joi@^15.1.0":
+"@hapi/joi@^15.1.0", "@hapi/joi@^15.1.1":
   "integrity" "sha512-entf8ZMOK8sc+8YfeOlM8pCfg3b5+WZIKBfUaaJT8UsjAAPjartzxIYm3TIbjvA4u+u++KbcXD38k682nVHDAQ=="
   "resolved" "https://registry.npmjs.org/@hapi/joi/-/joi-15.1.1.tgz"
   "version" "15.1.1"
@@ -2392,6 +2392,11 @@
   "version" "4.1.5"
   dependencies:
     "@types/node" "*"
+
+"@types/hapi__joi@^17.1.7":
+  "integrity" "sha512-byC9slpuqyDeEKegl/ViT8PCQRSp0CYkhLzz0cPxqxV6QC53Ht1cr2jG5iwOvtt/RxylUbTpXNqpgbf9Qu8QFw=="
+  "resolved" "https://registry.npmjs.org/@types/hapi__joi/-/hapi__joi-17.1.7.tgz"
+  "version" "17.1.7"
 
 "@types/history@*":
   "integrity" "sha512-MUc6zSmU3tEVnkQ78q0peeEjKWPUADMlC/t++2bI8WnAG2tvYRPIgHG8lWkXwqc8MsUF6Z2MOf+Mh5sazOmhiQ=="

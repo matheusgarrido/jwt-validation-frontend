@@ -1,34 +1,43 @@
 import { FormEvent, useState } from 'react';
 import axios from '../../api/axiosController';
+import { loginValidation } from '../../Models/Access.model';
 
+interface IValues {
+  email: string;
+  password: string;
+}
 interface IErrorList {
   all: string;
   email: string;
   password: string;
 }
+type TField = 'email' | 'password';
 interface INewError {
-  field: 'all' | 'email' | 'password';
+  field: 'all' | TField;
   value: string;
 }
 
 export const useLogin = () => {
   //Input states
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-
+  const defaultEmptyFields = { email: '', password: '' };
+  const [inputValues, setInputValues] = useState<IValues>(defaultEmptyFields);
   //Errors
-  const defaultError = {
-    email: '',
-    password: '',
-    all: '',
-  };
+  const defaultError = { ...defaultEmptyFields, all: '' };
   const [error, setError] = useState<IErrorList>(defaultError);
 
   //Get an inputted value
   const inputField = (event: FormEvent) => {
     handle.error([{ field: 'all', value: '' }]);
     const { value } = event.target as HTMLInputElement;
+    console.log(error);
     return value;
+  };
+  //Verify if has errors (invalid) or not (valid)
+  const invalidateForm = () => {
+    const { email, password } = inputValues;
+    const invalid = loginValidation({ email, password });
+    if (invalid) return invalid;
+    return false;
   };
 
   //Handle Form
@@ -44,6 +53,7 @@ export const useLogin = () => {
     //Form submit
     submit: async (event: FormEvent) => {
       event.preventDefault();
+      const { email, password } = inputValues;
       const newUser = await axios.post({ email, password }, '/auth/login');
       if (newUser.data.error) {
         handle.error([{ field: 'all', value: newUser.data.error.message }]);
@@ -53,19 +63,17 @@ export const useLogin = () => {
     },
     //Change input values state
     email: (event: FormEvent) => {
-      handle.error([{ field: 'email', value: '' }]);
-      setEmail(inputField(event));
+      setInputValues({ ...inputValues, email: inputField(event) });
     },
     password: (event: FormEvent) => {
-      handle.error([{ field: 'password', value: '' }]);
-      setPassword(inputField(event));
+      setInputValues({ ...inputValues, password: inputField(event) });
     },
   };
 
   const getValue = {
     //Get boolean to disable submit button
     disabledButton: (): boolean => {
-      return !email || !password;
+      return !!invalidateForm();
     },
     //Verify if some field has an error
     hasError: (): string => {
@@ -75,7 +83,7 @@ export const useLogin = () => {
   };
 
   return {
-    data: { email, password },
+    data: inputValues,
     error,
     handle,
     getValue,
