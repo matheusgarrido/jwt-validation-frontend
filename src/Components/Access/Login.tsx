@@ -22,7 +22,7 @@ const Login = () => {
           value={data.email}
           onInput={handle.input}
           onBlur={handle.blur}
-          className={Style.card__input}
+          className={Style['card__input']}
           required
         />
         <TextField
@@ -35,25 +35,32 @@ const Login = () => {
           value={data.password}
           onInput={handle.input}
           onBlur={handle.blur}
-          className={Style.card__input}
+          className={Style['card__input']}
           required
         />
-        <p>{error.all || getValue.hasError()}</p>
+        {getValue.hasError() && (
+          <Typography
+            className={`${Style['card__message']} ${Style['card__message--error']}`}
+          >
+            {error.all || getValue.hasError()}
+          </Typography>
+        )}
         <Button
           variant="contained"
           disabled={getValue.disabledButton()}
           type="submit"
-          className={Style.card__button}
+          className={Style['card__button']}
         >
           Login
         </Button>
-        <div className={Style.card__message}>
-          <Typography>Not registered yet?</Typography>
-          <Link to="/acesso/cadastro">
-            <Typography>Create your account</Typography>
-          </Link>
-        </div>
       </form>
+      <hr />
+      <div className={Style['card__submenu']}>
+        <Typography>Not registered yet?</Typography>
+        <Link to="/acesso/cadastro">
+          <Typography>Create your account</Typography>
+        </Link>
+      </div>
     </GridAccess>
   );
 };

@@ -18,14 +18,22 @@
 
 .card__input {
   width: 90%;
-  margin: 10px !important;
+  margin: 10px;
 }
 
 .card__button {
-  margin: 10px !important;
+  margin: 10px;
 }
 
 .card__message {
+  font-size: 12px;
+}
+
+.card__message--error {
+  color: $errorColor;
+}
+
+.card__submenu {
   display: block;
-  margin: 10px;
+  margin: 20px 10px 10px;
 }

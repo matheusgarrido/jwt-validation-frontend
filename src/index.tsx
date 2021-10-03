@@ -3,10 +3,13 @@ import ReactDOM from 'react-dom';
 import reportWebVitals from './reportWebVitals';
 import './index.scss';
 import Router from './Router';
+import { StyledEngineProvider } from '@mui/material';
 
 ReactDOM.render(
   <StrictMode>
-    <Router />
+    <StyledEngineProvider injectFirst>
+      <Router />
+    </StyledEngineProvider>
   </StrictMode>,
   document.getElementById('root')
 );
