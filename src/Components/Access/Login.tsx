@@ -57,9 +57,9 @@ const Login = () => {
       <hr />
       <div className={Style['card__submenu']}>
         <Typography>Not registered yet?</Typography>
-        <Link to="/acesso/cadastro">
-          <Typography>Create your account</Typography>
-        </Link>
+        <Typography>
+          <Link to="/register">Create your account</Link>
+        </Typography>
       </div>
     </GridAccess>
   );
