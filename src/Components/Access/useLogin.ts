@@ -31,9 +31,9 @@ export const useLogin = () => {
     return invalid ? invalid : false;
   };
   //Verify if one field has error
-  const invalidateGenericalObject = (field: TField) => {
+  const invalidateGenericalObject = (field: TField, value: string) => {
     const fieldToBeValidated: any = {};
-    fieldToBeValidated[field] = inputValues[field];
+    fieldToBeValidated[field] = value;
     return invalidateFields(fieldToBeValidated);
   };
 
@@ -63,8 +63,8 @@ export const useLogin = () => {
       const { value, field } = getValue.inputFieldValues(event);
       const newInputValues = { ...inputValues };
       newInputValues[field] = value;
-      await setInputValues(newInputValues);
-      const invalid = invalidateGenericalObject(field);
+      setInputValues(newInputValues);
+      const invalid = invalidateGenericalObject(field, value);
       if (!invalid) {
         handle.error([{ field, value: '' }]);
       }
@@ -73,7 +73,7 @@ export const useLogin = () => {
     blur: (event: FormEvent) => {
       const { field } = getValue.inputFieldValues(event);
       if (inputValues[field] || error[field]) {
-        const invalid = invalidateGenericalObject(field);
+        const invalid = invalidateGenericalObject(field, inputValues[field]);
         if (invalid) {
           handle.error([{ field, value: invalid[0].message }]);
           return;
