@@ -1,6 +1,7 @@
 import { FormEvent, useState } from 'react';
 import axios from '../../api/axiosController';
 import { loginValidation } from '../../Models/Access.model';
+import { useAuthContext } from '../../Providers/Auth.provider';
 
 interface IValues {
   email: string;
@@ -18,6 +19,7 @@ interface INewError {
 }
 
 export const useLogin = () => {
+  const AuthContext = useAuthContext();
   //Input states
   const defaultEmptyFields = { email: '', password: '' };
   const [inputValues, setInputValues] = useState<IValues>(defaultEmptyFields);
@@ -52,11 +54,14 @@ export const useLogin = () => {
       event.preventDefault();
       const { email, password } = inputValues;
       const newUser = await axios.post({ email, password }, '/auth/login');
+      //Checking errors
       if (newUser.data.error) {
         handle.error([{ field: 'all', value: newUser.data.error.message }]);
         return;
       }
+      //Saving tokens
       const { accessToken, refreshToken } = newUser.data;
+      AuthContext.setTokens({ access: accessToken, refresh: refreshToken });
     },
     //Change input values state
     input: async (event: FormEvent) => {

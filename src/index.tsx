@@ -4,11 +4,14 @@ import reportWebVitals from './reportWebVitals';
 import './index.scss';
 import Router from './Router';
 import { StyledEngineProvider } from '@mui/material';
+import { AuthProvider } from './Providers/Auth.provider';
 
 ReactDOM.render(
   <StrictMode>
     <StyledEngineProvider injectFirst>
-      <Router />
+      <AuthProvider>
+        <Router />
+      </AuthProvider>
     </StyledEngineProvider>
   </StrictMode>,
   document.getElementById('root')
