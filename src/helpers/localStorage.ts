@@ -1,16 +1,16 @@
-export type TTokens = 'access' | 'refresh';
-export type TKey = TTokens;
+export type ITokenType = 'access' | 'refresh';
+export type IKey = ITokenType;
 
 const Storage = {
   //Creates or update an item
-  setItem: (key: TKey, value: any) => {
+  setItem: (key: IKey, value: any) => {
     //If is an object, be converted to string
     const formattedValue =
       typeof value === 'object' ? JSON.stringify(value) : value;
     localStorage.setItem(key, formattedValue);
   },
   //Get the value of an item
-  getItem: (key: TKey): any => {
+  getItem: (key: IKey): any => {
     const item: any = localStorage.getItem(key);
     //Check if is an object
     if (item && typeof item === 'string') {

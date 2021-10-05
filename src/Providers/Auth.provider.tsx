@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect } from 'react';
-import Storage, { TTokens } from '../helpers/localStorage';
+import Storage, { ITokenType } from '../helpers/localStorage';
 
 //Interfaces and types
 interface ITokens {
@@ -15,7 +15,7 @@ interface IAuthContext {
 }
 
 //Get token
-const getTokenByKey = (key: TTokens) => {
+const getTokenByKey = (key: ITokenType) => {
   const savedToken = Storage.getItem(key);
   return savedToken ? savedToken : '';
 };
