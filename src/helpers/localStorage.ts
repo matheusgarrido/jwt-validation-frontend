@@ -1,4 +1,5 @@
-type TKey = 'access' | 'refresh';
+export type TTokens = 'access' | 'refresh';
+export type TKey = TTokens;
 
 const Storage = {
   //Creates or update an item

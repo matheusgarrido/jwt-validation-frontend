@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect } from 'react';
-import Storage from '../helpers/localStorage';
+import Storage, { TTokens } from '../helpers/localStorage';
 
 //Interfaces and types
 interface ITokens {
@@ -14,6 +14,12 @@ interface IAuthContext {
   setTokens: ISetTokens;
 }
 
+//Get token
+const getTokenByKey = (key: TTokens) => {
+  const savedToken = Storage.getItem(key);
+  return savedToken ? savedToken : '';
+};
+
 //Context
 export const AuthContext = React.createContext({} as IAuthContext);
 
@@ -22,10 +28,8 @@ export const AuthProvider = ({ children }: { children: React.ReactChild }) => {
   const [tokens, setTokens] = useState({} as ITokens);
   //Get value from local storage
   useEffect(() => {
-    const savedAccessToken = Storage.getItem('access');
-    const access = savedAccessToken ? savedAccessToken : '';
-    const savedRefreshToken = Storage.getItem('refresh');
-    const refresh = savedRefreshToken ? savedRefreshToken : '';
+    const access = getTokenByKey('access');
+    const refresh = getTokenByKey('refresh');
     setTokens({ access, refresh });
   }, []);
   //When the token value changes, update in the local storage
