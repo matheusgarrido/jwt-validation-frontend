@@ -12,9 +12,9 @@ interface IErrorList {
   email: string;
   password: string;
 }
-type TField = 'email' | 'password';
+type IField = 'email' | 'password';
 interface INewError {
-  field: 'all' | TField;
+  field: 'all' | IField;
   value: string;
 }
 
@@ -33,7 +33,7 @@ export const useLogin = () => {
     return invalid ? invalid : false;
   };
   //Verify if one field has error
-  const invalidateGenericalObject = (field: TField, value: string) => {
+  const invalidateGenericalObject = (field: IField, value: string) => {
     const fieldToBeValidated: any = {};
     fieldToBeValidated[field] = value;
     return invalidateFields(fieldToBeValidated);
@@ -90,10 +90,10 @@ export const useLogin = () => {
 
   const getValue = {
     //Get some input field values
-    inputFieldValues: (event: FormEvent): { value: string; field: TField } => {
+    inputFieldValues: (event: FormEvent): { value: string; field: IField } => {
       handle.error([{ field: 'all', value: '' }]);
       const target = event.target as HTMLInputElement;
-      const field = target.id as TField;
+      const field = target.id as IField;
       return { value: target.value, field };
     },
     //Get boolean to disable submit button
