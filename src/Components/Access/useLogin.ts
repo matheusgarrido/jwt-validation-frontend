@@ -13,8 +13,9 @@ interface IErrorList {
   password: string;
 }
 type IField = 'email' | 'password';
+type IErrorField = IField | 'all';
 interface INewError {
-  field: 'all' | IField;
+  field: IErrorField;
   value: string;
 }
 
@@ -38,6 +39,11 @@ export const useLogin = () => {
     fieldToBeValidated[field] = value;
     return invalidateFields(fieldToBeValidated);
   };
+  //Show a submit error
+  const showError = (field: IErrorField, value: string) => {
+    console.error(value);
+    handle.error([{ field, value }]);
+  };
 
   //Handle Form
   const handle = {
@@ -54,10 +60,14 @@ export const useLogin = () => {
       event.preventDefault();
       const { email, password } = inputValues;
       const newUser = await axios.post({ email, password }, '/auth/login');
-      //Checking errors
-      if (newUser.data.error) {
-        handle.error([{ field: 'all', value: newUser.data.error.message }]);
+      //If has error at connection with backend
+      if (!newUser) {
+        showError('all', 'An internal error has occurred, please try later');
         return;
+      }
+      //If has error in backend
+      if (newUser.data.error) {
+        return showError('all', newUser.data.error.message);
       }
       //Saving tokens
       const { accessToken, refreshToken } = newUser.data;
