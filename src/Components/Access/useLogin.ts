@@ -80,9 +80,11 @@ export const useLogin = () => {
       newInputValues[field] = value;
       setInputValues(newInputValues);
       const invalid = invalidateGenericalObject(field, value);
-      if (!invalid) {
-        handle.error([{ field, value: '' }]);
-      }
+      //Clean generic error
+      const errorCleaner: INewError[] = [{ field: 'all', value: '' }];
+      //Clean field error if current field is valid
+      if (!invalid) errorCleaner.push({ field, value: '' });
+      handle.error(errorCleaner);
     },
     // On blur (after the focus)
     blur: (event: FormEvent) => {
