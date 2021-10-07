@@ -4,16 +4,14 @@ import Login from './Components/Access/Login';
 import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom';
 import { useAuthContext } from './Providers/Auth.provider';
 
-type IAuthBoolean = () => boolean;
-
 export default function Router() {
-  const { isAuth }: { isAuth: IAuthBoolean } = useAuthContext();
+  const { isAuth }: { isAuth: boolean } = useAuthContext();
   return (
     <BrowserRouter>
       <Switch>
         {/* If user not auth */}
-        {!isAuth() && <Route path="/login" exact component={Login} />}
-        {!isAuth() && <Redirect from="/home" to="/login" />}
+        {!isAuth && <Route path="/login" exact component={Login} />}
+        {!isAuth && <Redirect from="/home" to="/login" />}
         {/* If user is auth */}
         <Redirect exact from="/login" to="/home" />
         <Redirect exact from="/home" to="/" />

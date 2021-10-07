@@ -12,7 +12,7 @@ type ISetTokens = React.Dispatch<React.SetStateAction<ITokens>>;
 interface IAuthContext {
   tokens: ITokens;
   setTokens: ISetTokens;
-  isAuth: () => boolean;
+  isAuth: boolean;
 }
 
 //Get token
@@ -40,7 +40,7 @@ export const AuthProvider = ({ children }: { children: React.ReactChild }) => {
       Storage.setItem('refresh', tokens.refresh);
     }
   }, [tokens]);
-  const isAuth = (): boolean => !!tokens.access && !!tokens.refresh;
+  const isAuth = ((): boolean => !!tokens.access && !!tokens.refresh)();
   //Provider component
   return (
     <AuthContext.Provider value={{ tokens, setTokens, isAuth }}>
