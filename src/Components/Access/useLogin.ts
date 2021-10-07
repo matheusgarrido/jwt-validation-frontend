@@ -20,14 +20,16 @@ interface INewError {
 }
 
 export const useLogin = () => {
+  //Auth Context custom hook
   const AuthContext = useAuthContext();
+
   //Input states
   const defaultEmptyFields = { email: '', password: '' };
   const [inputValues, setInputValues] = useState<IValues>(defaultEmptyFields);
+
   //Errors
   const defaultError = { ...defaultEmptyFields, all: '' };
   const [error, setError] = useState<IErrorList>(defaultError);
-
   //Verify if has errors (invalid) or not (valid)
   const invalidateFields = (fields: Object) => {
     const invalid = loginValidation(fields);
@@ -43,6 +45,16 @@ export const useLogin = () => {
   const showError = (field: IErrorField, value: string) => {
     console.error(value);
     handle.error([{ field, value }]);
+  };
+
+  //Get some input field values
+  const inputFieldValues = (
+    event: FormEvent
+  ): { value: string; field: IField } => {
+    handle.error([{ field: 'all', value: '' }]);
+    const target = event.target as HTMLInputElement;
+    const field = target.id as IField;
+    return { value: target.value, field };
   };
 
   //Handle Form
@@ -75,7 +87,7 @@ export const useLogin = () => {
     },
     //Change input values state
     input: async (event: FormEvent) => {
-      const { value, field } = getValue.inputFieldValues(event);
+      const { value, field } = inputFieldValues(event);
       const newInputValues = { ...inputValues };
       newInputValues[field] = value;
       setInputValues(newInputValues);
@@ -88,7 +100,7 @@ export const useLogin = () => {
     },
     // On blur (after the focus)
     blur: (event: FormEvent) => {
-      const { field } = getValue.inputFieldValues(event);
+      const { field } = inputFieldValues(event);
       if (inputValues[field] || error[field]) {
         const invalid = invalidateGenericalObject(field, inputValues[field]);
         if (invalid) {
@@ -101,23 +113,16 @@ export const useLogin = () => {
   };
 
   const getValue = {
-    //Get some input field values
-    inputFieldValues: (event: FormEvent): { value: string; field: IField } => {
-      handle.error([{ field: 'all', value: '' }]);
-      const target = event.target as HTMLInputElement;
-      const field = target.id as IField;
-      return { value: target.value, field };
-    },
     //Get boolean to disable submit button
-    disabledButton: (): boolean => {
+    disabledButton: ((): boolean => {
       const { email, password } = inputValues;
       return !!invalidateFields({ email, password });
-    },
+    })(),
     //Verify if some field has an error
-    hasError: (): string => {
+    hasError: ((): string => {
       const hasError = Object.values(error).filter((err) => !!err).length;
       return !!hasError ? 'Please fill the form correctly' : '';
-    },
+    })(),
   };
 
   return {

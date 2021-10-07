@@ -38,16 +38,16 @@ const Login = () => {
           className={Style['card__input']}
           required
         />
-        {getValue.hasError() && (
+        {getValue.hasError && (
           <Typography
             className={`${Style['card__message']} ${Style['card__message--error']}`}
           >
-            {error.all || getValue.hasError()}
+            {error.all || getValue.hasError}
           </Typography>
         )}
         <Button
           variant="contained"
-          disabled={getValue.disabledButton()}
+          disabled={getValue.disabledButton}
           type="submit"
           className={Style['card__button']}
         >
