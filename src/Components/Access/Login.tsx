@@ -4,11 +4,11 @@ import Style from './Access.module.scss';
 import { changeTitle } from '../../helpers/modifyHtmlHead';
 import { Link } from 'react-router-dom';
 import { TextField, Button, Typography } from '@mui/material';
-import useLogin from './useLogin';
+import useAccess from './useAccess';
 
 const Login = () => {
   changeTitle('Login');
-  const { data, error, handle, getValue } = useLogin();
+  const { data, error, handle, getValue } = useAccess('login');
   return (
     <GridAccess title="Login">
       <form onSubmit={handle.submit}>

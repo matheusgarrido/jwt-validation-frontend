@@ -3,6 +3,7 @@ import axios from '../../api/axiosController';
 import { loginValidation } from '../../Models/Access.model';
 import { useAuthContext } from '../../Providers/Auth.provider';
 
+type IAccessType = 'login' | 'register';
 interface IValues {
   email: string;
   password: string;
@@ -19,7 +20,7 @@ interface INewError {
   value: string;
 }
 
-export const useLogin = () => {
+export const useAccess = (type: IAccessType = 'login') => {
   //Auth Context custom hook
   const AuthContext = useAuthContext();
 
@@ -133,4 +134,4 @@ export const useLogin = () => {
   };
 };
 
-export default useLogin;
+export default useAccess;
