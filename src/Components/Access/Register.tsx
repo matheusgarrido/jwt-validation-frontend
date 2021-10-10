@@ -5,37 +5,48 @@ import { changeTitle } from '../../helpers/modifyHtmlHead';
 import { Link } from 'react-router-dom';
 import { TextField, Button, Typography } from '@mui/material';
 import useAccess from './useAccess';
-import { ILoginValues, ILoginErrorList, ILoginField } from './interfaces';
+import {
+  IRegisterValues,
+  IRegisterErrorList,
+  IRegisterField,
+} from './interfaces';
 
-const defaultValues: ILoginValues = {
+const defaultValues: IRegisterValues = {
   email: '',
   password: '',
+  role: '',
+  username: '',
+  birth: new Date(),
 };
-const defaultErrors: ILoginErrorList = {
+const defaultErrors: IRegisterErrorList = {
   all: '',
   email: '',
   password: '',
+  role: '',
+  username: '',
+  birth: '',
 };
 
-const Login = () => {
-  changeTitle('Login');
+const Register = () => {
+  changeTitle('Register');
   const { data, error, handle, getValue } = useAccess<
-    ILoginField,
-    ILoginValues,
-    ILoginErrorList
-  >('login', defaultValues, defaultErrors);
+    IRegisterField,
+    IRegisterValues,
+    IRegisterErrorList
+  >('register', defaultValues, defaultErrors);
   return (
-    <GridAccess title="Login">
+    <GridAccess title="Register">
       <form onSubmit={handle.submit}>
+        {/* <form> */}
         <TextField
           error={!!error.email || !!error.all}
           id="email"
           label="Email"
           type="email"
           variant="outlined"
+          onInput={handle.input}
           helperText={error.email}
           value={data.email}
-          onInput={handle.input}
           onBlur={handle.blur}
           className={Style['card__input']}
           required
@@ -46,9 +57,9 @@ const Login = () => {
           label="Password"
           type="password"
           variant="outlined"
+          onInput={handle.input}
           helperText={error.password}
           value={data.password}
-          onInput={handle.input}
           onBlur={handle.blur}
           className={Style['card__input']}
           required
@@ -66,7 +77,7 @@ const Login = () => {
           type="submit"
           className={Style['card__button']}
         >
-          Login
+          Sign up
         </Button>
       </form>
       <hr />
@@ -80,4 +91,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default Register;

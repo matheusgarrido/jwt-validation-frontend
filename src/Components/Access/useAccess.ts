@@ -2,35 +2,44 @@ import { FormEvent, useState } from 'react';
 import axios from '../../api/axiosController';
 import { loginValidation } from '../../Models/Access.model';
 import { useAuthContext } from '../../Providers/Auth.provider';
+import {
+  IAccessType,
+  IAccessField,
+  IAccessValues,
+  IAccessErrorList,
+} from './interfaces';
 
-type IAccessType = 'login' | 'register';
-interface IValues {
-  email: string;
-  password: string;
-}
-interface IErrorList {
-  all: string;
-  email: string;
-  password: string;
-}
-type IField = 'email' | 'password';
-type IErrorField = IField | 'all';
-interface INewError {
-  field: IErrorField;
-  value: string;
-}
+export const useAccess = <
+  //List of field names
+  IField extends IAccessField,
+  //List of field values
+  IValues extends IAccessValues,
+  //List of error list messages
+  IErrorList extends IAccessErrorList
+>(
+  //Type of page
+  type: IAccessType,
+  //Empty values
+  defaultValues: IValues,
+  //Empty errors
+  defaultErrorList: IErrorList
+) => {
+  //List of all fields + all to handle errors
+  type IAccessErrorField = IField | 'all';
+  //Interface to handle errors
+  interface INewError {
+    field: IAccessErrorField;
+    value: string;
+  }
 
-export const useAccess = (type: IAccessType = 'login') => {
   //Auth Context custom hook
   const AuthContext = useAuthContext();
 
-  //Input states
-  const defaultEmptyFields = { email: '', password: '' };
-  const [inputValues, setInputValues] = useState<IValues>(defaultEmptyFields);
+  //Dynamic initial inputs states
+  const [inputValues, setInputValues] = useState<IValues>(defaultValues);
 
   //Errors
-  const defaultError = { ...defaultEmptyFields, all: '' };
-  const [error, setError] = useState<IErrorList>(defaultError);
+  const [error, setError] = useState<IErrorList>(defaultErrorList);
   //Verify if has errors (invalid) or not (valid)
   const invalidateFields = (fields: Object) => {
     const invalid = loginValidation(fields);
@@ -42,8 +51,9 @@ export const useAccess = (type: IAccessType = 'login') => {
     fieldToBeValidated[field] = value;
     return invalidateFields(fieldToBeValidated);
   };
+
   //Show a submit error
-  const showError = (field: IErrorField, value: string) => {
+  const showError = (field: IAccessErrorField, value: string) => {
     console.error(value);
     handle.error([{ field, value }]);
   };
@@ -54,15 +64,16 @@ export const useAccess = (type: IAccessType = 'login') => {
   ): { value: string; field: IField } => {
     handle.error([{ field: 'all', value: '' }]);
     const target = event.target as HTMLInputElement;
-    const field = target.id as IField;
-    return { value: target.value, field };
+    const field: IField = target.id as IField;
+    const value: any = target.value;
+    return { value, field };
   };
 
   //Handle Form
   const handle = {
     //Change errors state
     error: (errors: INewError[]) => {
-      const newError: IErrorList = { ...error };
+      const newError: any = { ...error };
       errors.map((err) => {
         newError[err.field] = err.value;
       });
@@ -71,25 +82,32 @@ export const useAccess = (type: IAccessType = 'login') => {
     //Form submit
     submit: async (event: FormEvent) => {
       event.preventDefault();
-      const { email, password } = inputValues;
-      const newUser = await axios.post({ email, password }, '/auth/login');
-      //If has error at connection with backend
-      if (!newUser) {
-        showError('all', 'An internal error has occurred, please try later');
-        return;
+      switch (type) {
+        case 'login':
+          const { email, password } = inputValues;
+          const newUser = await axios.post({ email, password }, '/auth/login');
+          //If has error at connection with backend
+          if (!newUser) {
+            showError(
+              'all',
+              'An internal error has occurred, please try later'
+            );
+            return;
+          }
+          //If has error in backend
+          if (newUser.data.error) {
+            return showError('all', newUser.data.error.message);
+          }
+          //Saving tokens
+          const { accessToken, refreshToken } = newUser.data;
+          AuthContext.setTokens({ access: accessToken, refresh: refreshToken });
+          break;
       }
-      //If has error in backend
-      if (newUser.data.error) {
-        return showError('all', newUser.data.error.message);
-      }
-      //Saving tokens
-      const { accessToken, refreshToken } = newUser.data;
-      AuthContext.setTokens({ access: accessToken, refresh: refreshToken });
     },
     //Change input values state
     input: async (event: FormEvent) => {
       const { value, field } = inputFieldValues(event);
-      const newInputValues = { ...inputValues };
+      const newInputValues: any = { ...inputValues };
       newInputValues[field] = value;
       setInputValues(newInputValues);
       const invalid = invalidateGenericalObject(field, value);
@@ -102,8 +120,14 @@ export const useAccess = (type: IAccessType = 'login') => {
     // On blur (after the focus)
     blur: (event: FormEvent) => {
       const { field } = inputFieldValues(event);
-      if (inputValues[field] || error[field]) {
-        const invalid = invalidateGenericalObject(field, inputValues[field]);
+      const parsedInputValues = inputValues as any;
+      const parsedError = error as any;
+      const parsedField = field as string;
+      if (parsedInputValues[parsedField] || parsedError[parsedField]) {
+        const invalid = invalidateGenericalObject(
+          field,
+          parsedInputValues[parsedField]
+        );
         if (invalid) {
           handle.error([{ field, value: invalid[0].message }]);
           return;
